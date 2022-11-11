@@ -22,12 +22,14 @@ model User {
 }
 
 model Post {
-  id       String  @id @default(cuid())
-  title    String  @default("")
-  content  Json    @default("[{\"type\":\"paragraph\",\"children\":[{\"text\":\"\"}]}]")
-  author   User?   @relation("Post_author", fields: [authorId], references: [id])
-  authorId String? @map("author")
-  tags     Tag[]   @relation("Post_tags")
+  id        String    @id @default(cuid())
+  title     String    @default("")
+  content   Json      @default("[{\"type\":\"paragraph\",\"children\":[{\"text\":\"\"}]}]")
+  author    User?     @relation("Post_author", fields: [authorId], references: [id])
+  authorId  String?   @map("author")
+  fractals  Fractal[] @relation("Fractal_posts")
+  tags      Tag[]     @relation("Post_tags")
+  createdAt DateTime? @default(now())
 
   @@index([authorId])
 }
@@ -36,4 +38,32 @@ model Tag {
   id    String @id @default(cuid())
   name  String @default("")
   posts Post[] @relation("Post_tags")
+}
+
+model Fractal {
+  id                  String    @id @default(cuid())
+  name                String    @default("")
+  altText             String    @default("")
+  thumbnail_filesize  Int?
+  thumbnail_extension String?
+  thumbnail_width     Int?
+  thumbnail_height    Int?
+  thumbnail_id        String?
+  small_filesize      Int?
+  small_extension     String?
+  small_width         Int?
+  small_height        Int?
+  small_id            String?
+  medium_filesize     Int?
+  medium_extension    String?
+  medium_width        Int?
+  medium_height       Int?
+  medium_id           String?
+  large_filesize      Int?
+  large_extension     String?
+  large_width         Int?
+  large_height        Int?
+  large_id            String?
+  createdAt           DateTime? @default(now())
+  posts               Post[]    @relation("Fractal_posts")
 }

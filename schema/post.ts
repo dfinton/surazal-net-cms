@@ -3,6 +3,7 @@ import { allowAll } from '@keystone-6/core/access';
 
 import {
   text,
+  timestamp,
   relationship,
 } from '@keystone-6/core/fields';
 
@@ -78,6 +79,11 @@ const Post = list({
       many: false,
     }),
 
+    fractals: relationship({
+      ref: 'Fractal.posts',
+      many: true,
+    }),
+
     // with this field, you can add some Tags to Posts
     tags: relationship({
       // we could have used 'Tag', but then the relationship would only be 1-way
@@ -95,6 +101,10 @@ const Post = list({
         inlineConnect: true,
         inlineCreate: { fields: ['name'] },
       },
+    }),
+
+    createdAt: timestamp({
+      defaultValue: { kind: 'now' },
     }),
   },
 });

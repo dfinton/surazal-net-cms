@@ -17,6 +17,11 @@ const {
   DB_URL: dbUrl,
   DB_PROVIDER: dbProvider,
   CORS_ORIGIN: corsOriginJson,
+  S3_BUCKET_NAME: bucketName,
+  S3_REGION: region,
+  S3_ACCESS_KEY_ID: accessKeyId,
+  S3_SECRET_ACCESS_KEY: secretAccessKey,
+  S3_ENDPOINT: endpoint,
 } = process.env;
 
 const corsOrigin = JSON.parse(corsOriginJson);
@@ -30,6 +35,23 @@ export default withAuth(
     db: {
       provider: dbProvider,
       url: dbUrl,
+    },
+    storage: {
+      surazalNetImages: {
+        kind: 's3',
+        type: 'image',
+        bucketName,
+        region,
+        accessKeyId,
+        secretAccessKey,
+        proxied: {
+          baseUrl: '/fractal',
+        },
+        endpoint,
+        signed: {
+          expiry: 5000
+        },
+      },
     },
     server: {
       cors: {
