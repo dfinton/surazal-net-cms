@@ -44,9 +44,6 @@ export default withAuth(
         region,
         accessKeyId,
         secretAccessKey,
-        proxied: {
-          baseUrl: '/fractal',
-        },
         endpoint,
         signed: {
           expiry: 5000
