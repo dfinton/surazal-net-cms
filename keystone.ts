@@ -45,9 +45,6 @@ export default withAuth(
         accessKeyId,
         secretAccessKey,
         endpoint,
-        signed: {
-          expiry: 5000
-        },
       },
     },
     server: {
