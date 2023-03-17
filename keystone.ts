@@ -37,6 +37,15 @@ export default withAuth(
       url: dbUrl,
     },
     storage: {
+      surazalNetFiles: {
+        kind: 's3',
+        type: 'file',
+        bucketName,
+        region,
+        accessKeyId,
+        secretAccessKey,
+        endpoint,
+      },
       surazalNetImages: {
         kind: 's3',
         type: 'image',

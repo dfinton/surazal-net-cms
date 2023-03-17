@@ -1,5 +1,5 @@
 import { list } from '@keystone-6/core';
-import { text, image, relationship, timestamp } from '@keystone-6/core/fields';
+import { text, image, file, relationship, timestamp } from '@keystone-6/core/fields';
 import { allowAll } from '@keystone-6/core/access';
 
 const Fractal = list({
@@ -29,6 +29,10 @@ const Fractal = list({
       storage: 'surazalNetImages',
     }),
 
+    parameterFile: file({
+      storage: 'surazalNetFiles',
+    }),
+
     createdAt: timestamp({
       defaultValue: { kind: 'now' },
     }),
@@ -39,6 +43,19 @@ const Fractal = list({
         many: true
       }
     ),
+
+    categories: relationship({
+      ref: 'FractalCategory.fractals',
+      many: true,
+      ui: {
+        displayMode: 'cards',
+        cardFields: ['name'],
+        inlineEdit: { fields: ['name'] },
+        linkToItem: true,
+        inlineConnect: true,
+        inlineCreate: { fields: ['name'] },
+      },
+    }),
   },
 });
 

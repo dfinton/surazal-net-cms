@@ -296,9 +296,12 @@ type Fractal {
   small: ImageFieldOutput
   medium: ImageFieldOutput
   large: ImageFieldOutput
+  parameterFile: FileFieldOutput
   createdAt: DateTime
   posts(where: PostWhereInput! = {}, orderBy: [PostOrderByInput!]! = [], take: Int, skip: Int! = 0): [Post!]
   postsCount(where: PostWhereInput! = {}): Int
+  categories(where: FractalCategoryWhereInput! = {}, orderBy: [FractalCategoryOrderByInput!]! = [], take: Int, skip: Int! = 0): [FractalCategory!]
+  categoriesCount(where: FractalCategoryWhereInput! = {}): Int
 }
 
 type ImageFieldOutput {
@@ -317,6 +320,12 @@ enum ImageExtension {
   gif
 }
 
+type FileFieldOutput {
+  filename: String!
+  filesize: Int!
+  url: String!
+}
+
 input FractalWhereUniqueInput {
   id: ID
 }
@@ -330,6 +339,13 @@ input FractalWhereInput {
   altText: StringFilter
   createdAt: DateTimeNullableFilter
   posts: PostManyRelationFilter
+  categories: FractalCategoryManyRelationFilter
+}
+
+input FractalCategoryManyRelationFilter {
+  every: FractalCategoryWhereInput
+  some: FractalCategoryWhereInput
+  none: FractalCategoryWhereInput
 }
 
 input FractalOrderByInput {
@@ -346,8 +362,10 @@ input FractalUpdateInput {
   small: ImageFieldInput
   medium: ImageFieldInput
   large: ImageFieldInput
+  parameterFile: FileFieldInput
   createdAt: DateTime
   posts: PostRelateToManyForUpdateInput
+  categories: FractalCategoryRelateToManyForUpdateInput
 }
 
 input ImageFieldInput {
@@ -356,6 +374,17 @@ input ImageFieldInput {
 
 """The `Upload` scalar type represents a file upload."""
 scalar Upload
+
+input FileFieldInput {
+  upload: Upload!
+}
+
+input FractalCategoryRelateToManyForUpdateInput {
+  disconnect: [FractalCategoryWhereUniqueInput!]
+  set: [FractalCategoryWhereUniqueInput!]
+  create: [FractalCategoryCreateInput!]
+  connect: [FractalCategoryWhereUniqueInput!]
+}
 
 input FractalUpdateArgs {
   where: FractalWhereUniqueInput!
@@ -369,8 +398,55 @@ input FractalCreateInput {
   small: ImageFieldInput
   medium: ImageFieldInput
   large: ImageFieldInput
+  parameterFile: FileFieldInput
   createdAt: DateTime
   posts: PostRelateToManyForCreateInput
+  categories: FractalCategoryRelateToManyForCreateInput
+}
+
+input FractalCategoryRelateToManyForCreateInput {
+  create: [FractalCategoryCreateInput!]
+  connect: [FractalCategoryWhereUniqueInput!]
+}
+
+type FractalCategory {
+  id: ID!
+  name: String
+  fractals(where: FractalWhereInput! = {}, orderBy: [FractalOrderByInput!]! = [], take: Int, skip: Int! = 0): [Fractal!]
+  fractalsCount(where: FractalWhereInput! = {}): Int
+}
+
+input FractalCategoryWhereUniqueInput {
+  id: ID
+}
+
+input FractalCategoryWhereInput {
+  AND: [FractalCategoryWhereInput!]
+  OR: [FractalCategoryWhereInput!]
+  NOT: [FractalCategoryWhereInput!]
+  id: IDFilter
+  name: StringFilter
+  fractals: FractalManyRelationFilter
+}
+
+input FractalCategoryOrderByInput {
+  id: OrderDirection
+  name: OrderDirection
+}
+
+input FractalCategoryUpdateInput {
+  name: String
+  fractals: FractalRelateToManyForUpdateInput
+}
+
+input FractalCategoryUpdateArgs {
+  where: FractalCategoryWhereUniqueInput!
+  data: FractalCategoryUpdateInput!
+}
+
+input FractalCategoryCreateInput {
+  name: String
+  fractals: FractalRelateToManyForCreateInput
 }
 
 """
@@ -403,6 +479,12 @@ type Mutation {
   updateFractals(data: [FractalUpdateArgs!]!): [Fractal]
   deleteFractal(where: FractalWhereUniqueInput!): Fractal
   deleteFractals(where: [FractalWhereUniqueInput!]!): [Fractal]
+  createFractalCategory(data: FractalCategoryCreateInput!): FractalCategory
+  createFractalCategories(data: [FractalCategoryCreateInput!]!): [FractalCategory]
+  updateFractalCategory(where: FractalCategoryWhereUniqueInput!, data: FractalCategoryUpdateInput!): FractalCategory
+  updateFractalCategories(data: [FractalCategoryUpdateArgs!]!): [FractalCategory]
+  deleteFractalCategory(where: FractalCategoryWhereUniqueInput!): FractalCategory
+  deleteFractalCategories(where: [FractalCategoryWhereUniqueInput!]!): [FractalCategory]
   endSession: Boolean!
   authenticateUserWithPassword(email: String!, password: String!): UserAuthenticationWithPasswordResult
   createInitialUser(data: CreateInitialUserInput!): UserAuthenticationWithPasswordSuccess!
@@ -438,6 +520,9 @@ type Query {
   fractals(where: FractalWhereInput! = {}, orderBy: [FractalOrderByInput!]! = [], take: Int, skip: Int! = 0): [Fractal!]
   fractal(where: FractalWhereUniqueInput!): Fractal
   fractalsCount(where: FractalWhereInput! = {}): Int
+  fractalCategories(where: FractalCategoryWhereInput! = {}, orderBy: [FractalCategoryOrderByInput!]! = [], take: Int, skip: Int! = 0): [FractalCategory!]
+  fractalCategory(where: FractalCategoryWhereUniqueInput!): FractalCategory
+  fractalCategoriesCount(where: FractalCategoryWhereInput! = {}): Int
   keystone: KeystoneMeta!
   authenticatedItem: AuthenticatedItem
 }
