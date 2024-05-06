@@ -145,8 +145,6 @@ type Post {
   title: String
   content: Post_content_Document
   author: User
-  fractals(where: FractalWhereInput! = {}, orderBy: [FractalOrderByInput!]! = [], take: Int, skip: Int! = 0): [Fractal!]
-  fractalsCount(where: FractalWhereInput! = {}): Int
   tags(where: TagWhereInput! = {}, orderBy: [TagOrderByInput!]! = [], take: Int, skip: Int! = 0): [Tag!]
   tagsCount(where: TagWhereInput! = {}): Int
   createdAt: DateTime
@@ -167,15 +165,8 @@ input PostWhereInput {
   id: IDFilter
   title: StringFilter
   author: UserWhereInput
-  fractals: FractalManyRelationFilter
   tags: TagManyRelationFilter
   createdAt: DateTimeNullableFilter
-}
-
-input FractalManyRelationFilter {
-  every: FractalWhereInput
-  some: FractalWhereInput
-  none: FractalWhereInput
 }
 
 input TagManyRelationFilter {
@@ -194,7 +185,6 @@ input PostUpdateInput {
   title: String
   content: JSON
   author: UserRelateToOneForUpdateInput
-  fractals: FractalRelateToManyForUpdateInput
   tags: TagRelateToManyForUpdateInput
   createdAt: DateTime
 }
@@ -203,13 +193,6 @@ input UserRelateToOneForUpdateInput {
   create: UserCreateInput
   connect: UserWhereUniqueInput
   disconnect: Boolean
-}
-
-input FractalRelateToManyForUpdateInput {
-  disconnect: [FractalWhereUniqueInput!]
-  set: [FractalWhereUniqueInput!]
-  create: [FractalCreateInput!]
-  connect: [FractalWhereUniqueInput!]
 }
 
 input TagRelateToManyForUpdateInput {
@@ -228,7 +211,6 @@ input PostCreateInput {
   title: String
   content: JSON
   author: UserRelateToOneForCreateInput
-  fractals: FractalRelateToManyForCreateInput
   tags: TagRelateToManyForCreateInput
   createdAt: DateTime
 }
@@ -236,11 +218,6 @@ input PostCreateInput {
 input UserRelateToOneForCreateInput {
   create: UserCreateInput
   connect: UserWhereUniqueInput
-}
-
-input FractalRelateToManyForCreateInput {
-  create: [FractalCreateInput!]
-  connect: [FractalWhereUniqueInput!]
 }
 
 input TagRelateToManyForCreateInput {
@@ -288,167 +265,6 @@ input TagCreateInput {
   posts: PostRelateToManyForCreateInput
 }
 
-type Fractal {
-  id: ID!
-  name: String
-  altText: String
-  thumbnail: ImageFieldOutput
-  small: ImageFieldOutput
-  medium: ImageFieldOutput
-  large: ImageFieldOutput
-  parameterFile: FileFieldOutput
-  createdAt: DateTime
-  posts(where: PostWhereInput! = {}, orderBy: [PostOrderByInput!]! = [], take: Int, skip: Int! = 0): [Post!]
-  postsCount(where: PostWhereInput! = {}): Int
-  categories(where: FractalCategoryWhereInput! = {}, orderBy: [FractalCategoryOrderByInput!]! = [], take: Int, skip: Int! = 0): [FractalCategory!]
-  categoriesCount(where: FractalCategoryWhereInput! = {}): Int
-}
-
-type ImageFieldOutput {
-  id: ID!
-  filesize: Int!
-  width: Int!
-  height: Int!
-  extension: ImageExtension!
-  url: String!
-}
-
-enum ImageExtension {
-  jpg
-  png
-  webp
-  gif
-}
-
-type FileFieldOutput {
-  filename: String!
-  filesize: Int!
-  url: String!
-}
-
-input FractalWhereUniqueInput {
-  id: ID
-}
-
-input FractalWhereInput {
-  AND: [FractalWhereInput!]
-  OR: [FractalWhereInput!]
-  NOT: [FractalWhereInput!]
-  id: IDFilter
-  name: StringFilter
-  altText: StringFilter
-  createdAt: DateTimeNullableFilter
-  posts: PostManyRelationFilter
-  categories: FractalCategoryManyRelationFilter
-}
-
-input FractalCategoryManyRelationFilter {
-  every: FractalCategoryWhereInput
-  some: FractalCategoryWhereInput
-  none: FractalCategoryWhereInput
-}
-
-input FractalOrderByInput {
-  id: OrderDirection
-  name: OrderDirection
-  altText: OrderDirection
-  createdAt: OrderDirection
-}
-
-input FractalUpdateInput {
-  name: String
-  altText: String
-  thumbnail: ImageFieldInput
-  small: ImageFieldInput
-  medium: ImageFieldInput
-  large: ImageFieldInput
-  parameterFile: FileFieldInput
-  createdAt: DateTime
-  posts: PostRelateToManyForUpdateInput
-  categories: FractalCategoryRelateToManyForUpdateInput
-}
-
-input ImageFieldInput {
-  upload: Upload!
-}
-
-"""The `Upload` scalar type represents a file upload."""
-scalar Upload
-
-input FileFieldInput {
-  upload: Upload!
-}
-
-input FractalCategoryRelateToManyForUpdateInput {
-  disconnect: [FractalCategoryWhereUniqueInput!]
-  set: [FractalCategoryWhereUniqueInput!]
-  create: [FractalCategoryCreateInput!]
-  connect: [FractalCategoryWhereUniqueInput!]
-}
-
-input FractalUpdateArgs {
-  where: FractalWhereUniqueInput!
-  data: FractalUpdateInput!
-}
-
-input FractalCreateInput {
-  name: String
-  altText: String
-  thumbnail: ImageFieldInput
-  small: ImageFieldInput
-  medium: ImageFieldInput
-  large: ImageFieldInput
-  parameterFile: FileFieldInput
-  createdAt: DateTime
-  posts: PostRelateToManyForCreateInput
-  categories: FractalCategoryRelateToManyForCreateInput
-}
-
-input FractalCategoryRelateToManyForCreateInput {
-  create: [FractalCategoryCreateInput!]
-  connect: [FractalCategoryWhereUniqueInput!]
-}
-
-type FractalCategory {
-  id: ID!
-  name: String
-  fractals(where: FractalWhereInput! = {}, orderBy: [FractalOrderByInput!]! = [], take: Int, skip: Int! = 0): [Fractal!]
-  fractalsCount(where: FractalWhereInput! = {}): Int
-}
-
-input FractalCategoryWhereUniqueInput {
-  id: ID
-}
-
-input FractalCategoryWhereInput {
-  AND: [FractalCategoryWhereInput!]
-  OR: [FractalCategoryWhereInput!]
-  NOT: [FractalCategoryWhereInput!]
-  id: IDFilter
-  name: StringFilter
-  fractals: FractalManyRelationFilter
-}
-
-input FractalCategoryOrderByInput {
-  id: OrderDirection
-  name: OrderDirection
-}
-
-input FractalCategoryUpdateInput {
-  name: String
-  fractals: FractalRelateToManyForUpdateInput
-}
-
-input FractalCategoryUpdateArgs {
-  where: FractalCategoryWhereUniqueInput!
-  data: FractalCategoryUpdateInput!
-}
-
-input FractalCategoryCreateInput {
-  name: String
-  fractals: FractalRelateToManyForCreateInput
-}
-
 """
 The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
 """
@@ -473,18 +289,6 @@ type Mutation {
   updateTags(data: [TagUpdateArgs!]!): [Tag]
   deleteTag(where: TagWhereUniqueInput!): Tag
   deleteTags(where: [TagWhereUniqueInput!]!): [Tag]
-  createFractal(data: FractalCreateInput!): Fractal
-  createFractals(data: [FractalCreateInput!]!): [Fractal]
-  updateFractal(where: FractalWhereUniqueInput!, data: FractalUpdateInput!): Fractal
-  updateFractals(data: [FractalUpdateArgs!]!): [Fractal]
-  deleteFractal(where: FractalWhereUniqueInput!): Fractal
-  deleteFractals(where: [FractalWhereUniqueInput!]!): [Fractal]
-  createFractalCategory(data: FractalCategoryCreateInput!): FractalCategory
-  createFractalCategories(data: [FractalCategoryCreateInput!]!): [FractalCategory]
-  updateFractalCategory(where: FractalCategoryWhereUniqueInput!, data: FractalCategoryUpdateInput!): FractalCategory
-  updateFractalCategories(data: [FractalCategoryUpdateArgs!]!): [FractalCategory]
-  deleteFractalCategory(where: FractalCategoryWhereUniqueInput!): FractalCategory
-  deleteFractalCategories(where: [FractalCategoryWhereUniqueInput!]!): [FractalCategory]
   endSession: Boolean!
   authenticateUserWithPassword(email: String!, password: String!): UserAuthenticationWithPasswordResult
   createInitialUser(data: CreateInitialUserInput!): UserAuthenticationWithPasswordSuccess!
@@ -517,12 +321,6 @@ type Query {
   tags(where: TagWhereInput! = {}, orderBy: [TagOrderByInput!]! = [], take: Int, skip: Int! = 0): [Tag!]
   tag(where: TagWhereUniqueInput!): Tag
   tagsCount(where: TagWhereInput! = {}): Int
-  fractals(where: FractalWhereInput! = {}, orderBy: [FractalOrderByInput!]! = [], take: Int, skip: Int! = 0): [Fractal!]
-  fractal(where: FractalWhereUniqueInput!): Fractal
-  fractalsCount(where: FractalWhereInput! = {}): Int
-  fractalCategories(where: FractalCategoryWhereInput! = {}, orderBy: [FractalCategoryOrderByInput!]! = [], take: Int, skip: Int! = 0): [FractalCategory!]
-  fractalCategory(where: FractalCategoryWhereUniqueInput!): FractalCategory
-  fractalCategoriesCount(where: FractalCategoryWhereInput! = {}): Int
   keystone: KeystoneMeta!
   authenticatedItem: AuthenticatedItem
 }
@@ -553,9 +351,10 @@ type KeystoneAdminUIListMeta {
   pageSize: Int!
   labelField: String!
   fields: [KeystoneAdminUIFieldMeta!]!
+  groups: [KeystoneAdminUIFieldGroupMeta!]!
   initialSort: KeystoneAdminUISort
   isHidden: Boolean!
-  isSingleton: Boolean
+  isSingleton: Boolean!
 }
 
 type KeystoneAdminUIFieldMeta {
@@ -593,12 +392,24 @@ enum KeystoneAdminUIFieldMetaListViewFieldMode {
 
 type KeystoneAdminUIFieldMetaItemView {
   fieldMode: KeystoneAdminUIFieldMetaItemViewFieldMode
+  fieldPosition: KeystoneAdminUIFieldMetaItemViewFieldPosition
 }
 
 enum KeystoneAdminUIFieldMetaItemViewFieldMode {
   edit
   read
   hidden
+}
+
+enum KeystoneAdminUIFieldMetaItemViewFieldPosition {
+  form
+  sidebar
+}
+
+type KeystoneAdminUIFieldGroupMeta {
+  label: String!
+  description: String
+  fields: [KeystoneAdminUIFieldMeta!]!
 }
 
 type KeystoneAdminUISort {

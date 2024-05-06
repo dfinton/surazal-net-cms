@@ -27,7 +27,6 @@ model Post {
   content   Json      @default("[{\"type\":\"paragraph\",\"children\":[{\"text\":\"\"}]}]")
   author    User?     @relation("Post_author", fields: [authorId], references: [id])
   authorId  String?   @map("author")
-  fractals  Fractal[] @relation("Fractal_posts")
   tags      Tag[]     @relation("Post_tags")
   createdAt DateTime? @default(now())
 
@@ -38,41 +37,4 @@ model Tag {
   id    String @id @default(cuid())
   name  String @default("")
   posts Post[] @relation("Post_tags")
-}
-
-model Fractal {
-  id                     String            @id @default(cuid())
-  name                   String            @default("")
-  altText                String            @default("")
-  thumbnail_filesize     Int?
-  thumbnail_extension    String?
-  thumbnail_width        Int?
-  thumbnail_height       Int?
-  thumbnail_id           String?
-  small_filesize         Int?
-  small_extension        String?
-  small_width            Int?
-  small_height           Int?
-  small_id               String?
-  medium_filesize        Int?
-  medium_extension       String?
-  medium_width           Int?
-  medium_height          Int?
-  medium_id              String?
-  large_filesize         Int?
-  large_extension        String?
-  large_width            Int?
-  large_height           Int?
-  large_id               String?
-  parameterFile_filesize Int?
-  parameterFile_filename String?
-  createdAt              DateTime?         @default(now())
-  posts                  Post[]            @relation("Fractal_posts")
-  categories             FractalCategory[] @relation("Fractal_categories")
-}
-
-model FractalCategory {
-  id       String    @id @default(cuid())
-  name     String    @default("")
-  fractals Fractal[] @relation("Fractal_categories")
 }

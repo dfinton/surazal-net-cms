@@ -79,11 +79,6 @@ const Post = list({
       many: false,
     }),
 
-    fractals: relationship({
-      ref: 'Fractal.posts',
-      many: true,
-    }),
-
     // with this field, you can add some Tags to Posts
     tags: relationship({
       // we could have used 'Tag', but then the relationship would only be 1-way
