@@ -67,6 +67,10 @@ const Post = list({
     createdAt: timestamp({
       defaultValue: { kind: 'now' },
     }),
+
+    modifiedAt: timestamp({
+      defaultValue: { kind: 'now' },
+    }),
   },
 });
 

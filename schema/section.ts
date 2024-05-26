@@ -22,8 +22,8 @@ const Section = list({
       isIndexed: 'unique',
     }),
     label: text(),
-    // this can be helpful to find out all the Posts associated with a Section
-    pages: relationship({ ref: 'Page.sections', many: true }),
+    // this can be helpful to find out all the Pages associated with a Section
+    pages: relationship({ ref: 'Page.section', many: true }),
   },
 });
 

@@ -41,22 +41,24 @@ model Page {
   content    Json      @default("[{\"type\":\"paragraph\",\"children\":[{\"text\":\"\"}]}]")
   author     User?     @relation("Page_author", fields: [authorId], references: [id])
   authorId   String?   @map("author")
-  sections   Section?  @relation("Page_sections", fields: [sectionsId], references: [id])
-  sectionsId String?   @map("sections")
+  section    Section?  @relation("Page_section", fields: [sectionId], references: [id])
+  sectionId  String?   @map("section")
   createdAt  DateTime? @default(now())
+  modifiedAt DateTime? @default(now())
 
   @@index([authorId])
-  @@index([sectionsId])
+  @@index([sectionId])
 }
 
 model Post {
-  id        String    @id @default(cuid())
-  title     String    @default("")
-  content   Json      @default("[{\"type\":\"paragraph\",\"children\":[{\"text\":\"\"}]}]")
-  author    User?     @relation("Post_author", fields: [authorId], references: [id])
-  authorId  String?   @map("author")
-  tags      Tag[]     @relation("Post_tags")
-  createdAt DateTime? @default(now())
+  id         String    @id @default(cuid())
+  title      String    @default("")
+  content    Json      @default("[{\"type\":\"paragraph\",\"children\":[{\"text\":\"\"}]}]")
+  author     User?     @relation("Post_author", fields: [authorId], references: [id])
+  authorId   String?   @map("author")
+  tags       Tag[]     @relation("Post_tags")
+  createdAt  DateTime? @default(now())
+  modifiedAt DateTime? @default(now())
 
   @@index([authorId])
 }
@@ -65,7 +67,7 @@ model Section {
   id    String @id @default(cuid())
   slug  String @unique @default("")
   label String @default("")
-  pages Page[] @relation("Page_sections")
+  pages Page[] @relation("Page_section")
 }
 
 model Tag {

@@ -18,7 +18,7 @@ export default {
       center: true,
       end: true,
     },
-    headingLevels: [3, 4, 5, 6],
+    headingLevels: [1, 2, 3, 4, 5, 6],
     blockTypes: {
       blockquote: true,
       code: true

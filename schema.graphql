@@ -223,8 +223,9 @@ type Page {
   id: ID!
   content: Page_content_Document
   author: User
-  sections: Section
+  section: Section
   createdAt: DateTime
+  modifiedAt: DateTime
 }
 
 type Page_content_Document {
@@ -241,20 +242,23 @@ input PageWhereInput {
   NOT: [PageWhereInput!]
   id: IDFilter
   author: UserWhereInput
-  sections: SectionWhereInput
+  section: SectionWhereInput
   createdAt: DateTimeNullableFilter
+  modifiedAt: DateTimeNullableFilter
 }
 
 input PageOrderByInput {
   id: OrderDirection
   createdAt: OrderDirection
+  modifiedAt: OrderDirection
 }
 
 input PageUpdateInput {
   content: JSON
   author: UserRelateToOneForUpdateInput
-  sections: SectionRelateToOneForUpdateInput
+  section: SectionRelateToOneForUpdateInput
   createdAt: DateTime
+  modifiedAt: DateTime
 }
 
 input UserRelateToOneForUpdateInput {
@@ -277,8 +281,9 @@ input PageUpdateArgs {
 input PageCreateInput {
   content: JSON
   author: UserRelateToOneForCreateInput
-  sections: SectionRelateToOneForCreateInput
+  section: SectionRelateToOneForCreateInput
   createdAt: DateTime
+  modifiedAt: DateTime
 }
 
 input UserRelateToOneForCreateInput {
@@ -299,6 +304,7 @@ type Post {
   tags(where: TagWhereInput! = {}, orderBy: [TagOrderByInput!]! = [], take: Int, skip: Int! = 0): [Tag!]
   tagsCount(where: TagWhereInput! = {}): Int
   createdAt: DateTime
+  modifiedAt: DateTime
 }
 
 type Post_content_Document {
@@ -318,6 +324,7 @@ input PostWhereInput {
   author: UserWhereInput
   tags: TagManyRelationFilter
   createdAt: DateTimeNullableFilter
+  modifiedAt: DateTimeNullableFilter
 }
 
 input TagManyRelationFilter {
@@ -330,6 +337,7 @@ input PostOrderByInput {
   id: OrderDirection
   title: OrderDirection
   createdAt: OrderDirection
+  modifiedAt: OrderDirection
 }
 
 input PostUpdateInput {
@@ -338,6 +346,7 @@ input PostUpdateInput {
   author: UserRelateToOneForUpdateInput
   tags: TagRelateToManyForUpdateInput
   createdAt: DateTime
+  modifiedAt: DateTime
 }
 
 input TagRelateToManyForUpdateInput {
@@ -358,6 +367,7 @@ input PostCreateInput {
   author: UserRelateToOneForCreateInput
   tags: TagRelateToManyForCreateInput
   createdAt: DateTime
+  modifiedAt: DateTime
 }
 
 input TagRelateToManyForCreateInput {

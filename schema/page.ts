@@ -42,8 +42,8 @@ const Page = list({
       many: false,
     }),
 
-    // with this field, you can add some Sections to Pages
-    sections: relationship({
+    // with this field, you can add a section to Pages
+    section: relationship({
       // we could have used 'Section', but then the relationship would only be 1-way
       ref: 'Section.pages',
 
@@ -58,6 +58,10 @@ const Page = list({
     }),
 
     createdAt: timestamp({
+      defaultValue: { kind: 'now' },
+    }),
+
+    modifiedAt: timestamp({
       defaultValue: { kind: 'now' },
     }),
   },
