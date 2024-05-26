@@ -12,13 +12,41 @@ generator client {
   output   = "node_modules/.prisma/client"
 }
 
-model User {
-  id        String    @id @default(cuid())
-  name      String    @default("")
-  email     String    @unique @default("")
-  password  String
-  posts     Post[]    @relation("Post_author")
-  createdAt DateTime? @default(now())
+model Category {
+  id     String  @id @default(cuid())
+  name   String  @default("")
+  images Image[] @relation("Category_images")
+}
+
+model Image {
+  id                  String     @id @default(cuid())
+  name                String     @default("")
+  altText             String     @default("")
+  thumbnail_filesize  Int?
+  thumbnail_extension String?
+  thumbnail_width     Int?
+  thumbnail_height    Int?
+  thumbnail_id        String?
+  fullsize_filesize   Int?
+  fullsize_extension  String?
+  fullsize_width      Int?
+  fullsize_height     Int?
+  fullsize_id         String?
+  createdAt           DateTime?  @default(now())
+  categories          Category[] @relation("Category_images")
+}
+
+model Page {
+  id         String    @id @default(cuid())
+  content    Json      @default("[{\"type\":\"paragraph\",\"children\":[{\"text\":\"\"}]}]")
+  author     User?     @relation("Page_author", fields: [authorId], references: [id])
+  authorId   String?   @map("author")
+  sections   Section?  @relation("Page_sections", fields: [sectionsId], references: [id])
+  sectionsId String?   @map("sections")
+  createdAt  DateTime? @default(now())
+
+  @@index([authorId])
+  @@index([sectionsId])
 }
 
 model Post {
@@ -33,8 +61,25 @@ model Post {
   @@index([authorId])
 }
 
+model Section {
+  id    String @id @default(cuid())
+  slug  String @unique @default("")
+  label String @default("")
+  pages Page[] @relation("Page_sections")
+}
+
 model Tag {
   id    String @id @default(cuid())
   name  String @default("")
   posts Post[] @relation("Post_tags")
+}
+
+model User {
+  id        String    @id @default(cuid())
+  name      String    @default("")
+  email     String    @unique @default("")
+  password  String
+  posts     Post[]    @relation("Post_author")
+  pages     Page[]    @relation("Page_author")
+  createdAt DateTime? @default(now())
 }

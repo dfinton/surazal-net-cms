@@ -11,25 +11,23 @@ import { document } from '@keystone-6/fields-document';
 
 import documentConfig from '../config/document';
 
-const Post = list({
+const Page = list({
   // WARNING
   //   for this starter project, anyone can create, query, update and delete anything
   //   if you want to prevent random people on the internet from accessing your data,
   //   you can find out more at https://keystonejs.com/docs/guides/auth-and-access-control
   access: allowAll,
 
-  // this is the fields for our Post list
+  // this is the fields for our Page list
   fields: {
-    title: text({ validation: { isRequired: true } }),
-
     // the document field can be used for making rich editable content
     //   you can find out more at https://keystonejs.com/docs/guides/document-fields
     content: document(documentConfig),
 
-    // with this field, you can set a User as the author for a Post
+    // with this field, you can set a User as the author for a Page
     author: relationship({
       // we could have used 'User', but then the relationship would only be 1-way
-      ref: 'User.posts',
+      ref: 'User.pages',
 
       // this is some customisations for changing how this will look in the AdminUI
       ui: {
@@ -40,27 +38,22 @@ const Post = list({
         inlineConnect: true,
       },
 
-      // a Post can only have one author
-      //   this is the default, but we show it here for verbosity
+      // a Page can only have one author
       many: false,
     }),
 
-    // with this field, you can add some Tags to Posts
-    tags: relationship({
-      // we could have used 'Tag', but then the relationship would only be 1-way
-      ref: 'Tag.posts',
+    // with this field, you can add some Sections to Pages
+    sections: relationship({
+      // we could have used 'Section', but then the relationship would only be 1-way
+      ref: 'Section.pages',
 
-      // a Post can have many Tags, not just one
-      many: true,
+      // a Page can only have many Section
+      many: false,
 
       // this is some customisations for changing how this will look in the AdminUI
       ui: {
-        displayMode: 'cards',
-        cardFields: ['name'],
-        inlineEdit: { fields: ['name'] },
-        linkToItem: true,
-        inlineConnect: true,
-        inlineCreate: { fields: ['name'] },
+        displayMode: 'select',
+        labelField: 'label',
       },
     }),
 
@@ -70,4 +63,4 @@ const Post = list({
   },
 });
 
-export default Post;
+export default Page;

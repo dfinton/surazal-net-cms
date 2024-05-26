@@ -30,9 +30,10 @@ const User = list({
 
     password: password({ validation: { isRequired: true } }),
 
-    // we can use this field to see what Posts this User has authored
+    // we can use this field to see what Posts and Pages this User has authored
     //   more on that in the Post list below
     posts: relationship({ ref: 'Post.author', many: true }),
+    pages: relationship({ ref: 'Page.author', many: true }),
 
     createdAt: timestamp({
       defaultValue: { kind: 'now' },
