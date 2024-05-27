@@ -219,6 +219,50 @@ input CategoryRelateToManyForCreateInput {
   connect: [CategoryWhereUniqueInput!]
 }
 
+type Link {
+  id: ID!
+  slug: String
+  label: String
+  linkList: JSON
+}
+
+input LinkWhereUniqueInput {
+  id: ID
+  slug: String
+}
+
+input LinkWhereInput {
+  AND: [LinkWhereInput!]
+  OR: [LinkWhereInput!]
+  NOT: [LinkWhereInput!]
+  id: IDFilter
+  slug: StringFilter
+  label: StringFilter
+}
+
+input LinkOrderByInput {
+  id: OrderDirection
+  slug: OrderDirection
+  label: OrderDirection
+}
+
+input LinkUpdateInput {
+  slug: String
+  label: String
+  linkList: JSON
+}
+
+input LinkUpdateArgs {
+  where: LinkWhereUniqueInput!
+  data: LinkUpdateInput!
+}
+
+input LinkCreateInput {
+  slug: String
+  label: String
+  linkList: JSON
+}
+
 type Page {
   id: ID!
   content: Page_content_Document
@@ -578,6 +622,12 @@ type Mutation {
   updateImages(data: [ImageUpdateArgs!]!): [Image]
   deleteImage(where: ImageWhereUniqueInput!): Image
   deleteImages(where: [ImageWhereUniqueInput!]!): [Image]
+  createLink(data: LinkCreateInput!): Link
+  createLinks(data: [LinkCreateInput!]!): [Link]
+  updateLink(where: LinkWhereUniqueInput!, data: LinkUpdateInput!): Link
+  updateLinks(data: [LinkUpdateArgs!]!): [Link]
+  deleteLink(where: LinkWhereUniqueInput!): Link
+  deleteLinks(where: [LinkWhereUniqueInput!]!): [Link]
   createPage(data: PageCreateInput!): Page
   createPages(data: [PageCreateInput!]!): [Page]
   updatePage(where: PageWhereUniqueInput!, data: PageUpdateInput!): Page
@@ -637,6 +687,9 @@ type Query {
   images(where: ImageWhereInput! = {}, orderBy: [ImageOrderByInput!]! = [], take: Int, skip: Int! = 0): [Image!]
   image(where: ImageWhereUniqueInput!): Image
   imagesCount(where: ImageWhereInput! = {}): Int
+  links(where: LinkWhereInput! = {}, orderBy: [LinkOrderByInput!]! = [], take: Int, skip: Int! = 0): [Link!]
+  link(where: LinkWhereUniqueInput!): Link
+  linksCount(where: LinkWhereInput! = {}): Int
   pages(where: PageWhereInput! = {}, orderBy: [PageOrderByInput!]! = [], take: Int, skip: Int! = 0): [Page!]
   page(where: PageWhereUniqueInput!): Page
   pagesCount(where: PageWhereInput! = {}): Int

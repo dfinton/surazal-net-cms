@@ -36,6 +36,13 @@ model Image {
   categories          Category[] @relation("Category_images")
 }
 
+model Link {
+  id       String @id @default(cuid())
+  slug     String @unique @default("")
+  label    String @default("")
+  linkList Json?
+}
+
 model Page {
   id         String    @id @default(cuid())
   content    Json      @default("[{\"type\":\"paragraph\",\"children\":[{\"text\":\"\"}]}]")

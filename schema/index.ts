@@ -2,6 +2,7 @@ import type { Lists } from '.keystone/types';
 
 import Category from './category';
 import Image from './image';
+import Link from './link';
 import Page from './page';
 import Post from './post';
 import Section from './section';
@@ -11,6 +12,7 @@ import User from './user';
 export const lists: Lists = {
   Category,
   Image,
+  Link,
   Page,
   Post,
   Section,
