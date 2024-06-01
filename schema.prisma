@@ -60,6 +60,7 @@ model Page {
 model Post {
   id         String    @id @default(cuid())
   title      String    @default("")
+  slug       String    @unique @default("")
   content    Json      @default("[{\"type\":\"paragraph\",\"children\":[{\"text\":\"\"}]}]")
   author     User?     @relation("Post_author", fields: [authorId], references: [id])
   authorId   String?   @map("author")

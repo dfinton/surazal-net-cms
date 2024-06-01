@@ -22,6 +22,13 @@ const Post = list({
   fields: {
     title: text({ validation: { isRequired: true } }),
 
+    slug: text({
+      validation: {
+        isRequired: true,
+      },
+      isIndexed: 'unique',
+    }),
+
     // the document field can be used for making rich editable content
     //   you can find out more at https://keystonejs.com/docs/guides/document-fields
     content: document(documentConfig),
