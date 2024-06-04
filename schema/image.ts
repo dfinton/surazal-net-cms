@@ -13,10 +13,6 @@ const Image = list({
 
     altText: text(),
 
-    thumbnail: image({
-      storage: 'surazalNetImages',
-    }),
-
     fullsize: image({
       storage: 'surazalNetImages',
     }),

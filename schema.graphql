@@ -113,7 +113,6 @@ type Image {
   id: ID!
   name: String
   altText: String
-  thumbnail: ImageFieldOutput
   fullsize: ImageFieldOutput
   createdAt: DateTime
   categories(where: CategoryWhereInput! = {}, orderBy: [CategoryOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CategoryWhereUniqueInput): [Category!]
@@ -180,7 +179,6 @@ input ImageOrderByInput {
 input ImageUpdateInput {
   name: String
   altText: String
-  thumbnail: ImageFieldInput
   fullsize: ImageFieldInput
   createdAt: DateTime
   categories: CategoryRelateToManyForUpdateInput
@@ -208,7 +206,6 @@ input ImageUpdateArgs {
 input ImageCreateInput {
   name: String
   altText: String
-  thumbnail: ImageFieldInput
   fullsize: ImageFieldInput
   createdAt: DateTime
   categories: CategoryRelateToManyForCreateInput

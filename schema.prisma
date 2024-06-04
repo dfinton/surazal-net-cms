@@ -18,21 +18,16 @@ model Category {
 }
 
 model Image {
-  id                  String     @id @default(cuid())
-  name                String     @default("")
-  altText             String     @default("")
-  thumbnail_id        String?
-  thumbnail_filesize  Int?
-  thumbnail_width     Int?
-  thumbnail_height    Int?
-  thumbnail_extension String?
-  fullsize_id         String?
-  fullsize_filesize   Int?
-  fullsize_width      Int?
-  fullsize_height     Int?
-  fullsize_extension  String?
-  createdAt           DateTime?  @default(now())
-  categories          Category[] @relation("Category_images")
+  id                 String     @id @default(cuid())
+  name               String     @default("")
+  altText            String     @default("")
+  fullsize_id        String?
+  fullsize_filesize  Int?
+  fullsize_width     Int?
+  fullsize_height    Int?
+  fullsize_extension String?
+  createdAt          DateTime?  @default(now())
+  categories         Category[] @relation("Category_images")
 }
 
 model Link {
