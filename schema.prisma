@@ -11,23 +11,16 @@ generator client {
   provider = "prisma-client-js"
 }
 
-model Category {
-  id     String  @id @default(cuid())
-  name   String  @default("")
-  images Image[] @relation("Category_images")
-}
-
 model Image {
-  id                 String     @id @default(cuid())
-  name               String     @default("")
-  altText            String     @default("")
-  fullsize_id        String?
-  fullsize_filesize  Int?
-  fullsize_width     Int?
-  fullsize_height    Int?
-  fullsize_extension String?
-  createdAt          DateTime?  @default(now())
-  categories         Category[] @relation("Category_images")
+  id             String    @id @default(cuid())
+  name           String    @default("")
+  slug           String    @unique @default("")
+  file_id        String?
+  file_filesize  Int?
+  file_width     Int?
+  file_height    Int?
+  file_extension String?
+  createdAt      DateTime? @default(now())
 }
 
 model Link {

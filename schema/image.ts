@@ -2,37 +2,78 @@ import { list } from '@keystone-6/core';
 import { text, image, file, relationship, timestamp } from '@keystone-6/core/fields';
 import { allowAll } from '@keystone-6/core/access';
 
+const convertToSlug = (value: string) => {
+  let slug = value.toLowerCase();
+
+  if (!/[a-z0-9]/.test(slug)) {
+    return undefined;
+  }
+
+  slug = slug.replace(/[^a-z0-9]+/g, '-');
+  slug = slug.replace(/^-+|-+$/g, '');
+
+  return slug;
+};
+
 const Image = list({
   access: allowAll,
   fields: {
     name: text({
-      validation: {
-        isRequired: true,
+      ui: {
+        createView: {
+          fieldMode: ({ session, context }) => 'hidden',
+        },
+        itemView: {
+          fieldMode: ({ session, context, item }) => 'read',
+        },
+        listView: {
+          fieldMode: ({ session, context }) => 'read',
+        },
       },
     }),
 
-    altText: text(),
+    slug: text({
+      isIndexed: 'unique',
+      ui: {
+        createView: {
+          fieldMode: ({ session, context }) => 'hidden',
+        },
+        itemView: {
+          fieldMode: ({ session, context, item }) => 'read',
+        },
+        listView: {
+          fieldMode: ({ session, context }) => 'read',
+        },
+      },
+    }),
 
-    fullsize: image({
+    file: image({
+      validation: {
+        isRequired: true,
+      },
       storage: 'surazalNetImages',
     }),
 
     createdAt: timestamp({
       defaultValue: { kind: 'now' },
     }),
+  },
+  hooks: {
+    resolveInput: ({ resolvedData }) => {
+      const { file: imageFile } = resolvedData;
+      const { id: name } = imageFile;
+      const slug = convertToSlug(name);
 
-    categories: relationship({
-      ref: 'Category.images',
-      many: true,
-      ui: {
-        displayMode: 'cards',
-        cardFields: ['name'],
-        inlineEdit: { fields: ['name'] },
-        linkToItem: true,
-        inlineConnect: true,
-        inlineCreate: { fields: ['name'] },
-      },
-    }),
+      if (!slug) {
+        return resolvedData;
+      }
+
+      return {
+        ...resolvedData,
+        name,
+        slug,
+      }
+    },
   },
 });
 

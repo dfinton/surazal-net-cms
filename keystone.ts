@@ -6,7 +6,6 @@
 //   you can find out more at https://keystonejs.com/docs/apis/config
 
 import dotenv from 'dotenv';
-import { randomBytes } from 'node:crypto'
 import { config } from '@keystone-6/core';
 
 import { lists } from './schema';
@@ -56,8 +55,6 @@ export default withAuth(
         secretAccessKey,
         endpoint,
         transformName: (path) => {
-          const randomByteString = randomBytes(4).toString('base64url');
-
           // Regular expression to match the filename and extension
           const regex = /^(.*)\.([^.]+)$/;
 
@@ -66,14 +63,14 @@ export default withAuth(
 
           // If there is no match, return the whole filename and an empty string as extension
           if (!match) {
-              return `filename-${randomByteString}`;
+            return `${path}`;
           }
 
           // The match result will contain the full match at index 0, the filename at index 1, and the extension at index 2
           const basename = match[1];
           const extension = match[2];
 
-          return `${basename}-${randomByteString}`;
+          return `${basename}`;
         },
       },
     },
