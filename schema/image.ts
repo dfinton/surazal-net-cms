@@ -61,7 +61,7 @@ const Image = list({
   hooks: {
     resolveInput: ({ resolvedData }) => {
       const { file: imageFile } = resolvedData;
-      const { id: name } = imageFile;
+      const { id: name, extension } = imageFile;
       const slug = convertToSlug(name);
 
       if (!slug) {
@@ -70,7 +70,7 @@ const Image = list({
 
       return {
         ...resolvedData,
-        name,
+        name: `${name}.${extension}`,
         slug,
       }
     },
