@@ -11,16 +11,41 @@ generator client {
   provider = "prisma-client-js"
 }
 
+model Fractal {
+  id          String  @id @default(cuid())
+  name        String  @default("")
+  altText     String  @default("")
+  slug        String  @unique @default("")
+  thumbnail   Image?  @relation("Fractal_thumbnail", fields: [thumbnailId], references: [id])
+  thumbnailId String? @map("thumbnail")
+  small       Image?  @relation("Fractal_small", fields: [smallId], references: [id])
+  smallId     String? @map("small")
+  medium      Image?  @relation("Fractal_medium", fields: [mediumId], references: [id])
+  mediumId    String? @map("medium")
+  large       Image?  @relation("Fractal_large", fields: [largeId], references: [id])
+  largeId     String? @map("large")
+  posts       Post[]  @relation("Fractal_posts")
+
+  @@index([thumbnailId])
+  @@index([smallId])
+  @@index([mediumId])
+  @@index([largeId])
+}
+
 model Image {
-  id             String    @id @default(cuid())
-  name           String    @default("")
-  slug           String    @unique @default("")
-  file_id        String?
-  file_filesize  Int?
-  file_width     Int?
-  file_height    Int?
-  file_extension String?
-  createdAt      DateTime? @default(now())
+  id                     String    @id @default(cuid())
+  name                   String    @default("")
+  slug                   String    @unique @default("")
+  file_id                String?
+  file_filesize          Int?
+  file_width             Int?
+  file_height            Int?
+  file_extension         String?
+  createdAt              DateTime? @default(now())
+  from_Fractal_thumbnail Fractal[] @relation("Fractal_thumbnail")
+  from_Fractal_small     Fractal[] @relation("Fractal_small")
+  from_Fractal_medium    Fractal[] @relation("Fractal_medium")
+  from_Fractal_large     Fractal[] @relation("Fractal_large")
 }
 
 model Link {
@@ -52,6 +77,7 @@ model Post {
   author     User?     @relation("Post_author", fields: [authorId], references: [id])
   authorId   String?   @map("author")
   tags       Tag[]     @relation("Post_tags")
+  fractals   Fractal[] @relation("Fractal_posts")
   createdAt  DateTime? @default(now())
   modifiedAt DateTime? @default(now())
 
@@ -60,8 +86,8 @@ model Post {
 
 model Section {
   id    String @id @default(cuid())
-  slug  String @unique @default("")
   label String @default("")
+  slug  String @unique @default("")
   pages Page[] @relation("Page_section")
 }
 
@@ -74,6 +100,7 @@ model Tag {
 model User {
   id        String    @id @default(cuid())
   name      String    @default("")
+  slug      String    @unique @default("")
   email     String    @unique @default("")
   password  String
   posts     Post[]    @relation("Post_author")

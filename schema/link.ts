@@ -6,6 +6,8 @@ import {
   json,
 } from '@keystone-6/core/fields';
 
+import { convertToSlug } from '../util/convert-to-slug';
+
 const Link = list({
   // WARNING
   //   for this starter project, anyone can create, query, update and delete anything
@@ -16,13 +18,39 @@ const Link = list({
   // this is the fields for our Section list
   fields: {
     slug: text({
-      validation: {
-        isRequired: true,
-      },
       isIndexed: 'unique',
+      ui: {
+        createView: {
+          fieldMode: ({ session, context }) => 'hidden',
+        },
+        itemView: {
+          fieldMode: ({ session, context, item }) => 'read',
+        },
+        listView: {
+          fieldMode: ({ session, context }) => 'read',
+        },
+      },
     }),
+
     label: text(),
     linkList: json(),
+  },
+
+  hooks: {
+    resolveInput: ({ resolvedData }) => {
+      const { label } = resolvedData;
+      const slug = convertToSlug(label);
+
+      if (!slug) {
+        return resolvedData;
+      }
+
+      return {
+        ...resolvedData,
+        label,
+        slug,
+      }
+    },
   },
 });
 

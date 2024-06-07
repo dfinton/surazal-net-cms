@@ -9,6 +9,7 @@ import {
 
 import { document } from '@keystone-6/fields-document';
 
+import { convertToSlug } from '../util/convert-to-slug';
 import documentConfig from '../config/document';
 
 const Post = list({
@@ -23,10 +24,18 @@ const Post = list({
     title: text({ validation: { isRequired: true } }),
 
     slug: text({
-      validation: {
-        isRequired: true,
-      },
       isIndexed: 'unique',
+      ui: {
+        createView: {
+          fieldMode: ({ session, context }) => 'hidden',
+        },
+        itemView: {
+          fieldMode: ({ session, context, item }) => 'read',
+        },
+        listView: {
+          fieldMode: ({ session, context }) => 'read',
+        },
+      },
     }),
 
     // the document field can be used for making rich editable content
@@ -71,6 +80,11 @@ const Post = list({
       },
     }),
 
+    fractals: relationship({
+      ref: 'Fractal.posts',
+      many: true,
+    }),
+
     createdAt: timestamp({
       defaultValue: { kind: 'now' },
     }),
@@ -78,6 +92,23 @@ const Post = list({
     modifiedAt: timestamp({
       defaultValue: { kind: 'now' },
     }),
+  },
+
+  hooks: {
+    resolveInput: ({ resolvedData }) => {
+      const { title } = resolvedData;
+      const slug = convertToSlug(title);
+
+      if (!slug) {
+        return resolvedData;
+      }
+
+      return {
+        ...resolvedData,
+        title,
+        slug,
+      }
+    },
   },
 });
 

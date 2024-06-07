@@ -8,6 +8,8 @@ import {
   timestamp,
 } from '@keystone-6/core/fields';
 
+import { convertToSlug } from '../util/convert-to-slug';
+
 const User = list({
   // WARNING
   //   for this starter project, anyone can create, query, update and delete anything
@@ -20,6 +22,21 @@ const User = list({
     // by adding isRequired, we enforce that every User should have a name
     //   if no name is provided, an error will be displayed
     name: text({ validation: { isRequired: true } }),
+
+    slug: text({
+      isIndexed: 'unique',
+      ui: {
+        createView: {
+          fieldMode: ({ session, context }) => 'hidden',
+        },
+        itemView: {
+          fieldMode: ({ session, context, item }) => 'read',
+        },
+        listView: {
+          fieldMode: ({ session, context }) => 'read',
+        },
+      },
+    }),
 
     email: text({
       validation: { isRequired: true },
@@ -38,6 +55,24 @@ const User = list({
     createdAt: timestamp({
       defaultValue: { kind: 'now' },
     }),
+  },
+
+  hooks: {
+    resolveInput: ({ resolvedData }) => {
+      const { name } = resolvedData;
+
+      const slug = convertToSlug(name);
+
+      if (!slug) {
+        return resolvedData;
+      }
+
+      return {
+        ...resolvedData,
+        name,
+        slug,
+      }
+    },
   },
 });
 

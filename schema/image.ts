@@ -2,18 +2,7 @@ import { list } from '@keystone-6/core';
 import { text, image, file, relationship, timestamp } from '@keystone-6/core/fields';
 import { allowAll } from '@keystone-6/core/access';
 
-const convertToSlug = (value: string) => {
-  let slug = value.toLowerCase();
-
-  if (!/[a-z0-9]/.test(slug)) {
-    return undefined;
-  }
-
-  slug = slug.replace(/[^a-z0-9]+/g, '-');
-  slug = slug.replace(/^-+|-+$/g, '');
-
-  return slug;
-};
+import { convertToSlug } from '../util/convert-to-slug';
 
 const Image = list({
   access: allowAll,

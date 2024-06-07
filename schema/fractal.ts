@@ -1,23 +1,15 @@
 import { list } from '@keystone-6/core';
+import { text, image, file, relationship, timestamp } from '@keystone-6/core/fields';
 import { allowAll } from '@keystone-6/core/access';
-
-import {
-  text,
-  relationship,
-} from '@keystone-6/core/fields';
 
 import { convertToSlug } from '../util/convert-to-slug';
 
-const Section = list({
-  // WARNING
-  //   for this starter project, anyone can create, query, update and delete anything
-  //   if you want to prevent random people on the internet from accessing your data,
-  //   you can find out more at https://keystonejs.com/docs/guides/auth-and-access-control
+const Fractal = list({
   access: allowAll,
 
-  // this is the fields for our Section list
   fields: {
-    label: text(),
+    name: text(),
+    altText: text(),
 
     slug: text({
       isIndexed: 'unique',
@@ -34,13 +26,38 @@ const Section = list({
       },
     }),
 
-    pages: relationship({ ref: 'Page.section', many: true }),
+    thumbnail: relationship({
+      ref: 'Image',
+      many: false,
+    }),
+
+    small: relationship({
+      ref: 'Image',
+      many: false,
+    }),
+
+    medium: relationship({
+      ref: 'Image',
+      many: false,
+    }),
+
+    large: relationship({
+      ref: 'Image',
+      many: false,
+    }),
+
+    posts: relationship(
+      {
+        ref: 'Post.fractals',
+        many: true
+      }
+    ),
   },
 
   hooks: {
     resolveInput: ({ resolvedData }) => {
-      const { label } = resolvedData;
-      const slug = convertToSlug(label);
+      const { name } = resolvedData;
+      const slug = convertToSlug(name);
 
       if (!slug) {
         return resolvedData;
@@ -48,11 +65,11 @@ const Section = list({
 
       return {
         ...resolvedData,
-        label,
+        name,
         slug,
       }
     },
   },
 });
 
-export default Section;
+export default Fractal;
