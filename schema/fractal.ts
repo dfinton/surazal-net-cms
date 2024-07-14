@@ -52,6 +52,14 @@ const Fractal = list({
         many: true
       }
     ),
+
+    createdAt: timestamp({
+      defaultValue: { kind: 'now' },
+    }),
+
+    modifiedAt: timestamp({
+      defaultValue: { kind: 'now' },
+    }),
   },
 
   hooks: {

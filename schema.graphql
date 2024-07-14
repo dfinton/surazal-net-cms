@@ -12,7 +12,11 @@ type Fractal {
   large: Image
   posts(where: PostWhereInput! = {}, orderBy: [PostOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PostWhereUniqueInput): [Post!]
   postsCount(where: PostWhereInput! = {}): Int
+  createdAt: DateTime
+  modifiedAt: DateTime
 }
+
+scalar DateTime @specifiedBy(url: "https://datatracker.ietf.org/doc/html/rfc3339#section-5.6")
 
 input FractalWhereUniqueInput {
   id: ID
@@ -32,6 +36,8 @@ input FractalWhereInput {
   medium: ImageWhereInput
   large: ImageWhereInput
   posts: PostManyRelationFilter
+  createdAt: DateTimeNullableFilter
+  modifiedAt: DateTimeNullableFilter
 }
 
 input IDFilter {
@@ -85,11 +91,24 @@ input PostManyRelationFilter {
   none: PostWhereInput
 }
 
+input DateTimeNullableFilter {
+  equals: DateTime
+  in: [DateTime!]
+  notIn: [DateTime!]
+  lt: DateTime
+  lte: DateTime
+  gt: DateTime
+  gte: DateTime
+  not: DateTimeNullableFilter
+}
+
 input FractalOrderByInput {
   id: OrderDirection
   name: OrderDirection
   altText: OrderDirection
   slug: OrderDirection
+  createdAt: OrderDirection
+  modifiedAt: OrderDirection
 }
 
 enum OrderDirection {
@@ -106,6 +125,8 @@ input FractalUpdateInput {
   medium: ImageRelateToOneForUpdateInput
   large: ImageRelateToOneForUpdateInput
   posts: PostRelateToManyForUpdateInput
+  createdAt: DateTime
+  modifiedAt: DateTime
 }
 
 input ImageRelateToOneForUpdateInput {
@@ -135,6 +156,8 @@ input FractalCreateInput {
   medium: ImageRelateToOneForCreateInput
   large: ImageRelateToOneForCreateInput
   posts: PostRelateToManyForCreateInput
+  createdAt: DateTime
+  modifiedAt: DateTime
 }
 
 input ImageRelateToOneForCreateInput {
@@ -171,8 +194,6 @@ enum ImageExtension {
   gif
 }
 
-scalar DateTime @specifiedBy(url: "https://datatracker.ietf.org/doc/html/rfc3339#section-5.6")
-
 input ImageWhereUniqueInput {
   id: ID
   slug: String
@@ -186,17 +207,6 @@ input ImageWhereInput {
   name: StringFilter
   slug: StringFilter
   createdAt: DateTimeNullableFilter
-}
-
-input DateTimeNullableFilter {
-  equals: DateTime
-  in: [DateTime!]
-  notIn: [DateTime!]
-  lt: DateTime
-  lte: DateTime
-  gt: DateTime
-  gte: DateTime
-  not: DateTimeNullableFilter
 }
 
 input ImageOrderByInput {
